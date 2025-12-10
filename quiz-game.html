@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game - Happy Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F9F7FE 0%, #E6F7FF 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #FF6B8B, #FFD166, #4ECDC4, #06D6A0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .timer-pulse {
+            animation: pulse 1s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .question-appear {
+            animation: appear 0.5s ease;
+        }
+        
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .option-hover:hover {
+            transform: translateX(10px);
+            transition: transform 0.3s ease;
+        }
+        
+        .option-selected {
+            transform: scale(1.02);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .correct-answer {
+            background-color: #10B981 !important;
+            color: white !important;
+            border-color: #059669 !important;
+        }
+        
+        .correct-answer .option-letter {
+            background-color: white !important;
+            color: #10B981 !important;
+        }
+        
+        .wrong-answer {
+            background-color: #EF4444 !important;
+            color: white !important;
+            border-color: #DC2626 !important;
+        }
+        
+        .wrong-answer .option-letter {
+            background-color: white !important;
+            color: #EF4444 !important;
+        }
+        
+        .progress-bar-fill {
+            transition: width 0.3s ease;
+        }
+        
+        .result-modal {
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .star-animation {
+            animation: starPulse 0.5s ease;
+        }
+        
+        @keyframes starPulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        .option-letter {
+            transition: all 0.3s ease;
+        }
+        
+        .time-up {
+            animation: timeUp 0.5s ease;
+        }
+        
+        @keyframes timeUp {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-4 px-4">
+        <div class="container mx-auto max-w-4xl">
+            <div class="flex items-center justify-between">
+                <button id="back-to-quizzes" class="flex items-center space-x-2 text-purple-600 hover:text-purple-800 font-bold text-lg transition-all hover:-translate-x-1">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Quizzes</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center">
+                        <i class="fas fa-gamepad text-white"></i>
+                    </div>
+                    <h1 id="quiz-title" class="text-2xl font-bold rainbow-text font-comic">Quiz Challenge</h1>
+                </div>
+                <div class="w-24"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Quiz Area -->
+    <main class="container mx-auto max-w-4xl px-4 py-8">
+        <!-- Quiz Info Bar -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 rounded-full flex items-center justify-center" id="subject-icon">
+                        <i class="fas fa-question text-3xl text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-gray-800" id="subject-name">Loading Quiz...</h2>
+                        <p class="text-gray-600" id="subject-description">Get ready to test your knowledge!</p>
+                    </div>
+                </div>
+                
+                <div class="flex items-center space-x-6">
+                    <!-- Timer -->
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">Time Left</div>
+                        <div class="text-3xl font-bold text-blue-500" id="timer">30s</div>
+                    </div>
+                    
+                    <!-- Progress -->
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">Progress</div>
+                        <div class="text-3xl font-bold text-blue-600" id="progress">1/10</div>
+                    </div>
+                    
+                    <!-- Score -->
+                    <div class="text-center">
+                        <div class="text-sm text-gray-600 mb-1">Score</div>
+                        <div class="text-3xl font-bold text-yellow-600 flex items-center">
+                            <i class="fas fa-star mr-1"></i>
+                            <span id="score">0</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Progress Bar -->
+            <div class="mt-6">
+                <div class="w-full bg-gray-200 rounded-full h-4">
+                    <div id="progress-bar" class="progress-bar-fill h-4 rounded-full bg-gradient-to-r from-blue-500 to-purple-500" style="width: 10%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Question Card -->
+        <div class="bg-white rounded-3xl shadow-2xl p-8 mb-8 question-appear" id="question-card">
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-blue-100 text-blue-800 font-bold mb-2">
+                    <i class="fas fa-question-circle mr-2"></i>
+                    Question <span id="question-number">1</span>
+                </div>
+                <h2 id="question-text" class="text-3xl font-bold text-gray-800 mt-2">Loading question...</h2>
+            </div>
+            
+            <!-- Options -->
+            <div class="grid grid-cols-1 gap-4" id="options-container">
+                <!-- Options will be loaded here -->
+            </div>
+            
+            <!-- Navigation -->
+            <div class="flex justify-between mt-10">
+                <button id="prev-btn" class="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl font-bold hover:bg-gray-300 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <i class="fas fa-arrow-left mr-2"></i>Previous
+                </button>
+                
+                <button id="next-btn" class="px-8 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-bold hover:opacity-90 transition">
+                    Next Question<i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="bg-white rounded-2xl shadow-lg p-6">
+            <h3 class="text-xl font-bold text-gray-800 mb-4">
+                <i class="fas fa-lightbulb text-yellow-500 mr-2"></i>Quiz Instructions
+            </h3>
+            <ul class="grid grid-cols-1 md:grid-cols-2 gap-3 text-gray-600">
+                <li><i class="fas fa-check-circle text-green-500 mr-2"></i> 30 seconds per question</li>
+                <li><i class="fas fa-star text-yellow-500 mr-2"></i> Earn 1 star for each correct answer</li>
+                <li><i class="fas fa-clock text-red-500 mr-2"></i> Timer resets for each question</li>
+                <li><i class="fas fa-forward text-blue-500 mr-2"></i> Answers are saved immediately</li>
+            </ul>
+        </div>
+    </main>
+
+    <!-- Result Modal (Hidden by default) -->
+    <div id="result-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-8 text-center result-modal">
+            <div id="result-icon" class="w-24 h-24 rounded-full bg-gradient-to-r from-yellow-400 to-orange-500 flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-trophy text-white text-4xl"></i>
+            </div>
+            
+            <h2 class="text-4xl font-bold text-gray-800 mb-2">Quiz Completed!</h2>
+            <p class="text-gray-600 mb-6" id="result-message">Great job completing the quiz!</p>
+            
+            <div class="grid grid-cols-2 gap-4 mb-8">
+                <div class="bg-blue-50 rounded-xl p-4">
+                    <div class="text-3xl font-bold text-blue-600 flex items-center justify-center">
+                        <i class="fas fa-star mr-2"></i>
+                        <span id="final-score">0</span>
+                    </div>
+                    <div class="text-blue-800">Your Score</div>
+                </div>
+                <div class="bg-green-50 rounded-xl p-4">
+                    <div class="text-3xl font-bold text-green-600" id="correct-answers">0/10</div>
+                    <div class="text-green-800">Correct Answers</div>
+                </div>
+            </div>
+            
+            <div class="space-y-3">
+                <button onclick="restartQuiz()" class="w-full bg-gradient-to-r from-green-500 to-emerald-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition flex items-center justify-center">
+                    <i class="fas fa-redo mr-2"></i>Try Again
+                </button>
+                <button onclick="goHome()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition flex items-center justify-center">
+                    <i class="fas fa-home mr-2"></i>Back to Quizzes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Up Modal -->
+    <div id="timeup-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-8 text-center">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-clock text-white text-3xl"></i>
+            </div>
+            
+            <h2 class="text-3xl font-bold text-gray-800 mb-2">Time's Up! ⏰</h2>
+            <p class="text-gray-600 mb-6">Time ran out for this question. Moving to next question...</p>
+            
+            <button onclick="closeTimeUpModal()" class="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-xl font-bold hover:opacity-90 transition">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz Data
+        const quizData = {
+            agama: {
+                title: "Agama Quiz",
+                icon: "fa-mosque",
+                color: "from-purple-500 to-indigo-600",
+                description: "10 questions about religion & values",
+                questions: [
+                    {
+                        question: "Siapakah yang menciptakan langit dan bumi?",
+                        options: ["Guru", "Tuhan", "Teman"],
+                        correct: 1
+                    },
+                    {
+                        question: "Ketika menerima bantuan, kita harus mengatakan…",
+                        options: ["Permisi", "Terima kasih", "Sampai jumpa"],
+                        correct: 1
+                    },
+                    {
+                        question: "Sebelum makan kita sebaiknya…",
+                        options: ["Tidur", "Berdoa", "Lari"],
+                        correct: 1
+                    },
+                    {
+                        question: "Saat teman jatuh, sikap yang benar adalah…",
+                        options: ["Menertawakan", "Membantu", "Pergi"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kita harus bersikap… kepada orang tua.",
+                        options: ["Sopan", "Galak", "Marah"],
+                        correct: 0
+                    },
+                    {
+                        question: "Tempat untuk beribadah disebut…",
+                        options: ["Sekolah", "Rumah", "Tempat ibadah"],
+                        correct: 2
+                    },
+                    {
+                        question: "Jika ingin meminjam barang teman, kita harus…",
+                        options: ["Memaksa", "Minta izin", "Mengambil diam-diam"],
+                        correct: 1
+                    },
+                    {
+                        question: "Hari besar keagamaan dirayakan dengan…",
+                        options: ["Bermain kasar", "Saling menghormati", "Berbohong"],
+                        correct: 1
+                    },
+                    {
+                        question: "Sikap jujur berarti…",
+                        options: ["Mengatakan yang benar", "Berbohong", "Menyembunyikan kebenaran"],
+                        correct: 0
+                    },
+                    {
+                        question: "Kita harus berterima kasih kepada Tuhan atas…",
+                        options: ["Semua nikmat", "Semua mainan", "Semua makanan manis"],
+                        correct: 0
+                    }
+                ]
+            },
+            matematika: {
+                title: "Matematika Quiz",
+                icon: "fa-calculator",
+                color: "from-blue-500 to-cyan-600",
+                description: "10 questions about numbers & shapes",
+                questions: [
+                    {
+                        question: "2 + 1 = …",
+                        options: ["3", "4", "5"],
+                        correct: 0
+                    },
+                    {
+                        question: "5 – 2 = …",
+                        options: ["4", "2", "3"],
+                        correct: 2
+                    },
+                    {
+                        question: "Angka sebelum 7 adalah…",
+                        options: ["5", "6", "8"],
+                        correct: 1
+                    },
+                    {
+                        question: "Bentuk yang punya 3 sisi adalah…",
+                        options: ["Lingkaran", "Segitiga", "Persegi"],
+                        correct: 1
+                    },
+                    {
+                        question: "Nilai puluhan pada angka 23 adalah…",
+                        options: ["3", "2", "1"],
+                        correct: 1
+                    },
+                    {
+                        question: "Gambar berikut 🍎🍎🍎 menunjukkan jumlah…",
+                        options: ["2", "3", "4"],
+                        correct: 1
+                    },
+                    {
+                        question: "10 – 5 = …",
+                        options: ["4", "6", "5"],
+                        correct: 2
+                    },
+                    {
+                        question: "Mana yang paling panjang?",
+                        options: ["Pensil", "Penghapus", "Kertas kecil"],
+                        correct: 0
+                    },
+                    {
+                        question: "4 + 4 = …",
+                        options: ["6", "8", "10"],
+                        correct: 1
+                    },
+                    {
+                        question: "Urutan angka yang benar adalah…",
+                        options: ["1, 3, 2", "2, 1, 3", "1, 2, 3"],
+                        correct: 2
+                    }
+                ]
+            },
+            bahasa: {
+                title: "Bahasa Indonesia Quiz",
+                icon: "fa-language",
+                color: "from-green-500 to-emerald-600",
+                description: "10 questions about language & vocabulary",
+                questions: [
+                    {
+                        question: "Huruf pertama dalam abjad adalah…",
+                        options: ["B", "C", "A"],
+                        correct: 2
+                    },
+                    {
+                        question: "Lawan kata dari 'besar' adalah…",
+                        options: ["Tinggi", "Kecil", "Indah"],
+                        correct: 1
+                    },
+                    {
+                        question: "Nama lain untuk 'ibu' adalah…",
+                        options: ["Ayah", "Bunda", "Kakak"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kita menulis huruf di atas…",
+                        options: ["Kursi", "Buku", "Piring"],
+                        correct: 1
+                    },
+                    {
+                        question: "Ani membeli dua buku. Kata bilangan pada kalimat tersebut adalah…",
+                        options: ["Ani", "Buku", "Dua"],
+                        correct: 2
+                    },
+                    {
+                        question: "Ketika bertemu guru, kita mengucapkan…",
+                        options: ["Selamat pagi", "Selamat tidur", "Selamat makan"],
+                        correct: 0
+                    },
+                    {
+                        question: "'Ayah pergi bekerja.' Kata kerja pada kalimat tersebut adalah…",
+                        options: ["Ayah", "Pergi", "Bekerja"],
+                        correct: 1
+                    },
+                    {
+                        question: "Hewan berikut yang bisa terbang adalah…",
+                        options: ["Kucing", "Burung", "Ikan"],
+                        correct: 1
+                    },
+                    {
+                        question: "Sinonim dari 'cantik' adalah…",
+                        options: ["Jelek", "Indah", "Hitam"],
+                        correct: 1
+                    },
+                    {
+                        question: "Kata yang benar untuk menyebut banyak air adalah…",
+                        options: ["Air-air", "Berair", "Banyak air"],
+                        correct: 2
+                    }
+                ]
+            }
+        };
+
+        // Game State
+        let currentSubject = null;
+        let currentQuestion = 0;
+        let score = 0;
+        let timeLeft = 30;
+        let timerInterval = null;
+        let userAnswers = new Array(10).fill(null);
+        let answered = new Array(10).fill(false);
+
+        // DOM Elements
+        const quizTitle = document.getElementById('quiz-title');
+        const subjectIcon = document.getElementById('subject-icon');
+        const subjectName = document.getElementById('subject-name');
+        const subjectDescription = document.getElementById('subject-description');
+        const questionText = document.getElementById('question-text');
+        const questionNumber = document.getElementById('question-number');
+        const optionsContainer = document.getElementById('options-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const timerElement = document.getElementById('timer');
+        const progressElement = document.getElementById('progress');
+        const scoreElement = document.getElementById('score');
+        const progressBar = document.getElementById('progress-bar');
+        const resultModal = document.getElementById('result-modal');
+        const finalScore = document.getElementById('final-score');
+        const correctAnswers = document.getElementById('correct-answers');
+        const resultMessage = document.getElementById('result-message');
+        const resultIcon = document.getElementById('result-icon');
+        const backToQuizzesBtn = document.getElementById('back-to-quizzes');
+        const timeUpModal = document.getElementById('timeup-modal');
+
+        // Initialize Quiz
+        function initQuiz() {
+            // Get selected subject from localStorage
+            const subject = localStorage.getItem('selectedQuiz');
+            
+            if (!subject || !quizData[subject]) {
+                alert('No quiz selected! Redirecting to quizzes...');
+                window.location.href = 'quiz.html';
+                return;
+            }
+            
+            currentSubject = subject;
+            const data = quizData[subject];
+            
+            // Update UI
+            quizTitle.textContent = data.title;
+            subjectName.textContent = data.title;
+            subjectDescription.textContent = data.description;
+            subjectIcon.className = `w-16 h-16 rounded-full flex items-center justify-center bg-gradient-to-r ${data.color}`;
+            subjectIcon.innerHTML = `<i class="fas ${data.icon} text-white text-3xl"></i>`;
+            
+            // Setup back button
+            backToQuizzesBtn.addEventListener('click', function() {
+                if (confirm('Are you sure you want to leave? Your progress will be lost.')) {
+                    window.location.href = 'quiz.html';
+                }
+            });
+            
+            // Start timer for first question
+            startTimer();
+            
+            // Load first question
+            loadQuestion();
+            
+            // Setup event listeners for navigation
+            setupEventListeners();
+        }
+
+        // Setup Event Listeners
+        function setupEventListeners() {
+            // Next Question
+            nextBtn.addEventListener('click', () => {
+                goToNextQuestion();
+            });
+
+            // Previous Question
+            prevBtn.addEventListener('click', () => {
+                if (currentQuestion > 0) {
+                    // Stop current timer
+                    clearInterval(timerInterval);
+                    
+                    // Go to previous question
+                    currentQuestion--;
+                    
+                    // Start timer for previous question
+                    startTimer();
+                    
+                    // Load the question
+                    loadQuestion();
+                }
+            });
+        }
+
+        // Go to next question
+        function goToNextQuestion() {
+            // Stop current timer
+            clearInterval(timerInterval);
+            
+            // If not answered and not last question, mark as unanswered
+            if (currentQuestion < 9 && userAnswers[currentQuestion] === null) {
+                answered[currentQuestion] = false;
+            }
+            
+            // Move to next question
+            if (currentQuestion < 9) {
+                currentQuestion++;
+                
+                // Start timer for new question
+                startTimer();
+                
+                // Load the question
+                loadQuestion();
+            } else {
+                // If last question, end quiz
+                endQuiz();
+            }
+        }
+
+        // Start Timer for current question
+        function startTimer() {
+            timeLeft = 30;
+            updateTimerDisplay();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        // Update Timer Display
+        function updateTimerDisplay() {
+            timerElement.textContent = `${timeLeft}s`;
+            
+            // Update timer color based on time left
+            if (timeLeft <= 10) {
+                timerElement.classList.remove('text-blue-500', 'text-orange-500');
+                timerElement.classList.add('text-red-500', 'timer-pulse');
+            } else if (timeLeft <= 20) {
+                timerElement.classList.remove('text-blue-500', 'text-red-500', 'timer-pulse');
+                timerElement.classList.add('text-orange-500');
+            } else {
+                timerElement.classList.remove('text-red-500', 'text-orange-500', 'timer-pulse');
+                timerElement.classList.add('text-blue-500');
+            }
+        }
+
+        // Time's up for current question
+        function timeUp() {
+            // Mark as unanswered
+            if (userAnswers[currentQuestion] === null) {
+                answered[currentQuestion] = false;
+                userAnswers[currentQuestion] = -1; // -1 means time's up
+                
+                // Show time up modal
+                timeUpModal.classList.remove('hidden');
+                timerElement.classList.add('time-up');
+            }
+            
+            // Auto-advance after 2 seconds if not answered
+            setTimeout(() => {
+                if (currentQuestion < 9) {
+                    closeTimeUpModal();
+                    goToNextQuestion();
+                } else {
+                    closeTimeUpModal();
+                    endQuiz();
+                }
+            }, 2000);
+        }
+
+        // Close time up modal
+        function closeTimeUpModal() {
+            timeUpModal.classList.add('hidden');
+            timerElement.classList.remove('time-up');
+        }
+
+        // Load Question
+        function loadQuestion() {
+            const data = quizData[currentSubject];
+            const question = data.questions[currentQuestion];
+            
+            // Update question text and number
+            questionNumber.textContent = currentQuestion + 1;
+            questionText.textContent = question.question;
+            
+            // Update progress
+            progressElement.textContent = `${currentQuestion + 1}/10`;
+            progressBar.style.width = `${((currentQuestion + 1) / 10) * 100}%`;
+            
+            // Clear options
+            optionsContainer.innerHTML = '';
+            
+            // Create option buttons
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                
+                // Set base classes
+                optionElement.className = 'w-full p-6 text-left rounded-2xl bg-gray-50 border-2 border-transparent transition-all duration-300';
+                
+                // Add hover effect only if not answered
+                if (userAnswers[currentQuestion] === null) {
+                    optionElement.classList.add('option-hover');
+                }
+                
+                optionElement.innerHTML = `
+                    <div class="flex items-center">
+                        <div class="option-letter w-10 h-10 rounded-full bg-gradient-to-r from-gray-200 to-gray-300 flex items-center justify-center mr-4">
+                            <span class="font-bold text-gray-700">${String.fromCharCode(65 + index)}</span>
+                        </div>
+                        <span class="text-xl font-medium">${option}</span>
+                    </div>
+                `;
+                
+                // Check if this question was already answered
+                if (userAnswers[currentQuestion] !== null) {
+                    // Disable clicking
+                    optionElement.style.pointerEvents = 'none';
+                    
+                    // Check if this is the correct answer
+                    if (index === question.correct) {
+                        optionElement.classList.add('correct-answer');
+                    }
+                    
+                    // Check if this was the user's answer (and wrong)
+                    if (index === userAnswers[currentQuestion] && userAnswers[currentQuestion] !== question.correct) {
+                        optionElement.classList.add('wrong-answer');
+                    }
+                    
+                    // If user answered correctly, highlight their answer
+                    if (index === userAnswers[currentQuestion] && userAnswers[currentQuestion] === question.correct) {
+                        optionElement.classList.add('correct-answer');
+                    }
+                }
+                
+                // Add click event only if not answered yet
+                if (userAnswers[currentQuestion] === null) {
+                    optionElement.addEventListener('click', () => selectOption(index));
+                }
+                
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update navigation buttons
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Update next button text on last question
+            if (currentQuestion === 9) {
+                nextBtn.innerHTML = 'Finish Quiz <i class="fas fa-flag-checkered ml-2"></i>';
+            } else {
+                nextBtn.innerHTML = 'Next Question <i class="fas fa-arrow-right ml-2"></i>';
+            }
+            
+            // Add appear animation
+            const questionCard = document.getElementById('question-card');
+            questionCard.classList.remove('question-appear');
+            void questionCard.offsetWidth; // Trigger reflow
+            questionCard.classList.add('question-appear');
+        }
+
+        // Select Option
+        function selectOption(index) {
+            // If already answered, do nothing
+            if (userAnswers[currentQuestion] !== null) return;
+            
+            // Store answer
+            userAnswers[currentQuestion] = index;
+            answered[currentQuestion] = true;
+            
+            // Disable all options
+            const options = document.querySelectorAll('#options-container button');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+                opt.classList.remove('option-hover');
+            });
+            
+            const question = quizData[currentSubject].questions[currentQuestion];
+            const selectedOption = options[index];
+            
+            // Check if answer is correct
+            if (index === question.correct) {
+                score++;
+                scoreElement.textContent = score;
+                scoreElement.classList.add('star-animation');
+                setTimeout(() => scoreElement.classList.remove('star-animation'), 500);
+                
+                // Mark as correct
+                selectedOption.classList.add('correct-answer');
+            } else {
+                // Mark as wrong
+                selectedOption.classList.add('wrong-answer');
+                
+                // Highlight correct answer
+                options[question.correct].classList.add('correct-answer');
+            }
+            
+            // Auto-advance to next question after 1.5 seconds
+            clearInterval(timerInterval);
+            setTimeout(() => {
+                if (currentQuestion < 9) {
+                    goToNextQuestion();
+                } else {
+                    endQuiz();
+                }
+            }, 1500);
+        }
+
+        // End Quiz
+        function endQuiz() {
+            clearInterval(timerInterval);
+            
+            // Calculate results
+            const correctCount = score;
+            const percentage = (correctCount / 10) * 100;
+            
+            // Set result messages
+            finalScore.textContent = `${score}`;
+            correctAnswers.textContent = `${correctCount}/10`;
+            
+            // Update result icon and message based on score
+            let message = '';
+            let iconColor = 'from-yellow-400 to-orange-500';
+            let icon = 'fa-trophy';
+            
+            if (percentage >= 90) {
+                message = "Perfect! You're a genius! 🏆";
+                iconColor = 'from-yellow-400 to-orange-500';
+                icon = 'fa-trophy';
+            } else if (percentage >= 70) {
+                message = "Excellent work! You're really smart! 👍";
+                iconColor = 'from-blue-400 to-purple-500';
+                icon = 'fa-medal';
+            } else if (percentage >= 50) {
+                message = "Good job! Keep learning! 💪";
+                iconColor = 'from-green-400 to-emerald-500';
+                icon = 'fa-award';
+            } else {
+                message = "Nice try! Practice makes perfect! 🌟";
+                iconColor = 'from-gray-400 to-blue-400';
+                icon = 'fa-star';
+            }
+            
+            resultMessage.textContent = message;
+            resultIcon.className = `w-24 h-24 rounded-full bg-gradient-to-r ${iconColor} flex items-center justify-center mx-auto mb-6`;
+            resultIcon.innerHTML = `<i class="fas ${icon} text-white text-4xl"></i>`;
+            
+            // Show result modal
+            resultModal.classList.remove('hidden');
+            
+            // Disable further interaction
+            const options = document.querySelectorAll('#options-container button');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+        }
+
+        // Restart Quiz
+        function restartQuiz() {
+            resultModal.classList.add('hidden');
+            
+            // Reset game state
+            currentQuestion = 0;
+            score = 0;
+            userAnswers = new Array(10).fill(null);
+            answered = new Array(10).fill(false);
+            scoreElement.textContent = '0';
+            
+            // Start fresh
+            startTimer();
+            loadQuestion();
+        }
+
+        // Go Home (Back to Quizzes)
+        function goHome() {
+            window.location.href = 'quiz.html';
+        }
+
+        // Add keyboard shortcuts
+        function setupKeyboardShortcuts() {
+            document.addEventListener('keydown', (e) => {
+                // Don't trigger during modals
+                if (!resultModal.classList.contains('hidden') || !timeUpModal.classList.contains('hidden')) {
+                    return;
+                }
+                
+                if (e.key === '1' || e.key === 'a' || e.key === 'A') {
+                    const options = document.querySelectorAll('#options-container button');
+                    if (options[0]) options[0].click();
+                }
+                if (e.key === '2' || e.key === 'b' || e.key === 'B') {
+                    const options = document.querySelectorAll('#options-container button');
+                    if (options[1]) options[1].click();
+                }
+                if (e.key === '3' || e.key === 'c' || e.key === 'C') {
+                    const options = document.querySelectorAll('#options-container button');
+                    if (options[2]) options[2].click();
+                }
+                if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    nextBtn.click();
+                }
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevBtn.click();
+                }
+                
+                // Escape to go back
+                if (e.key === 'Escape') {
+                    backToQuizzesBtn.click();
+                }
+            });
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            initQuiz();
+            setupKeyboardShortcuts();
+        });
+
+        // Add confirmation before leaving page
+        window.addEventListener('beforeunload', (e) => {
+            if (currentQuestion > 0 && !resultModal.classList.contains('hidden')) {
+                e.preventDefault();
+                e.returnValue = 'Are you sure you want to leave? Your progress will be lost.';
+            }
+        });
+    </script>
+</body>
+</html>

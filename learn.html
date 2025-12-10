@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn - Happy Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F9F7FE 0%, #E6F7FF 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #FF6B8B, #FFD166, #4ECDC4, #06D6A0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .button-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .button-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .back-button {
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+        
+        .subject-card {
+            transition: all 0.3s ease;
+        }
+        
+        .subject-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-4 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex items-center justify-between">
+                <button onclick="window.location.href='index.html'" class="back-button flex items-center space-x-2 text-primary hover:text-pink-700 font-bold text-lg">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Home</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-tertiary flex items-center justify-center">
+                        <i class="fas fa-book-open text-white"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold rainbow-text font-comic">Learn Zone</h1>
+                </div>
+                <div class="w-24"></div> <!-- Spacer for balance -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-6xl px-4 py-8">
+        <!-- Welcome Section -->
+        <section class="text-center mb-12">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                Choose Your <span class="rainbow-text">Learning Adventure!</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+                Pick a subject and explore fun, interactive lessons designed just for you!
+            </p>
+        </section>
+
+        <!-- Subject Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <!-- Agama Card -->
+            <div class="subject-card">
+                <button onclick="window.location.href='learn-agama.html'" class="button-hover w-full h-80 rounded-3xl bg-gradient-to-br from-purple-500 to-indigo-600 shadow-2xl flex flex-col items-center justify-center p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-white opacity-30"></div>
+                    <div class="mb-6">
+                        <div class="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
+                            <i class="fas fa-mosque text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-4 font-comic">Agama</h3>
+                    <p class="text-white text-lg text-center opacity-90">
+                        Learn about religion, values & morals
+                    </p>
+                    <div class="mt-4">
+                        <span class="bg-white bg-opacity-30 text-white px-4 py-1 rounded-full text-sm font-bold">
+                            10+ Lessons
+                        </span>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                </button>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-yellow-400 mr-2"></i>
+                        Stories of Prophets
+                    </p>
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-yellow-400 mr-2"></i>
+                        Good Values & Morals
+                    </p>
+                </div>
+            </div>
+
+            <!-- Matematika Card -->
+            <div class="subject-card">
+                <button onclick="window.location.href='learn-math.html'" class="button-hover w-full h-80 rounded-3xl bg-gradient-to-br from-blue-500 to-cyan-600 shadow-2xl flex flex-col items-center justify-center p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-white opacity-30"></div>
+                    <div class="mb-6">
+                        <div class="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
+                            <i class="fas fa-calculator text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-4 font-comic">Matematika</h3>
+                    <p class="text-white text-lg text-center opacity-90">
+                        Discover the magic of numbers & shapes
+                    </p>
+                    <div class="mt-4">
+                        <span class="bg-white bg-opacity-30 text-white px-4 py-1 rounded-full text-sm font-bold">
+                            15+ Lessons
+                        </span>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                </button>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-blue-400 mr-2"></i>
+                        Counting & Numbers
+                    </p>
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-blue-400 mr-2"></i>
+                        Shapes & Patterns
+                    </p>
+                </div>
+            </div>
+
+            <!-- Bahasa Card -->
+            <div class="subject-card">
+                <button onclick="window.location.href='learn-bahasa.html'" class="button-hover w-full h-80 rounded-3xl bg-gradient-to-br from-green-500 to-emerald-600 shadow-2xl flex flex-col items-center justify-center p-6 relative overflow-hidden group">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-white opacity-30"></div>
+                    <div class="mb-6">
+                        <div class="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
+                            <i class="fas fa-language text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-4 font-comic">Bahasa</h3>
+                    <p class="text-white text-lg text-center opacity-90">
+                        Explore languages, stories & words
+                    </p>
+                    <div class="mt-4">
+                        <span class="bg-white bg-opacity-30 text-white px-4 py-1 rounded-full text-sm font-bold">
+                            12+ Lessons
+                        </span>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                </button>
+                <div class="mt-4 text-center">
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-green-400 mr-2"></i>
+                        ABCs & Vocabulary
+                    </p>
+                    <p class="text-gray-700">
+                        <i class="fas fa-star text-green-400 mr-2"></i>
+                        Stories & Reading
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Learning Tips -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 mb-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-6">
+                <i class="fas fa-lightbulb text-yellow-500 mr-3"></i>
+                Learning Tips
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-blue-50 rounded-2xl p-6">
+                    <h4 class="text-xl font-bold text-blue-800 mb-3">
+                        <i class="fas fa-clock text-blue-600 mr-2"></i>
+                        Daily Practice
+                    </h4>
+                    <p class="text-gray-700">
+                        Spend 15 minutes every day learning something new. Consistency is key!
+                    </p>
+                </div>
+                <div class="bg-green-50 rounded-2xl p-6">
+                    <h4 class="text-xl font-bold text-green-800 mb-3">
+                        <i class="fas fa-gamepad text-green-600 mr-2"></i>
+                        Make it Fun
+                    </h4>
+                    <p class="text-gray-700">
+                        Turn learning into a game! Challenge yourself and earn rewards.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8">
+        <div class="container mx-auto max-w-6xl px-4 text-center">
+            <p class="text-lg">
+                <i class="fas fa-heart text-pink-400 mr-2"></i>
+                Happy Learning from Happy Learn Team!
+            </p>
+            <p class="text-gray-400 mt-2">
+                &copy; 2025 Kelompok 8
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Add hover effects to subject cards
+        const subjectCards = document.querySelectorAll('.subject-card button');
+        subjectCards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-10px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

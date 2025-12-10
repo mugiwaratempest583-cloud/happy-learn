@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solve Quiz - Happy Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B8B",
+                        "secondary": "#4ECDC4",
+                        "tertiary": "#FFD166",
+                        "accent": "#06D6A0",
+                        "background": "#F9F7FE"
+                    },
+                    fontFamily: {
+                        "nunito": ["Nunito", "sans-serif"],
+                        "comic": ["Comic Neue", "cursive"]
+                    },
+                    animation: {
+                        "pulse": "pulse 2s infinite",
+                        "bounce": "bounce 1s infinite"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #F9F7FE 0%, #E6F7FF 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #FF6B8B, #FFD166, #4ECDC4, #06D6A0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .progress-bar {
+            transition: width 1s ease-in-out;
+        }
+        
+        .timer-circle {
+            stroke-linecap: round;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .option-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        
+        .option-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .option-card.selected {
+            border-color: #4ECDC4;
+            background-color: #f0f9ff;
+        }
+        
+        .option-card.correct {
+            border-color: #06D6A0;
+            background-color: #d1f7e5;
+        }
+        
+        .option-card.wrong {
+            border-color: #FF6B8B;
+            background-color: #ffe6ec;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0.8;
+            animation: fall linear infinite;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-6 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between">
+                <button onclick="window.location.href='parent.html'" class="back-button flex items-center space-x-3 text-primary hover:text-pink-700 font-bold text-lg group mb-4 sm:mb-0">
+                    <i class="fas fa-arrow-left group-hover:transform group-hover:-translate-x-2 transition-transform"></i>
+                    <span>Back to Parent Zone</span>
+                </button>
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-secondary to-teal-400 flex items-center justify-center animate-pulse">
+                        <i class="fas fa-child text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-4xl font-bold rainbow-text font-comic text-center">
+                        Children's Quiz
+                    </h1>
+                </div>
+                <div class="w-24 hidden sm:block"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-6xl px-4 py-8">
+        <!-- Quiz Selection Screen -->
+        <div id="quizSelectionScreen" class="bg-white rounded-3xl shadow-xl p-8 text-center">
+            <div class="mb-8">
+                <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-primary to-tertiary flex items-center justify-center">
+                    <i class="fas fa-gamepad text-white text-5xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Ready to Play?</h2>
+                <p class="text-gray-600 text-xl">Solve quizzes created by your parents!</p>
+            </div>
+            
+            <div id="availableQuizzes" class="space-y-4 mb-8">
+                <!-- Quizzes will be loaded here -->
+            </div>
+            
+            <div class="text-gray-500">
+                <i class="fas fa-info-circle mr-2"></i>
+                Select a quiz to start the game!
+            </div>
+        </div>
+
+        <!-- Quiz Screen (Hidden initially) -->
+        <div id="quizScreen" class="hidden">
+            <!-- Quiz Header -->
+            <div class="bg-white rounded-3xl shadow-xl p-6 mb-8">
+                <div class="flex flex-col md:flex-row justify-between items-center">
+                    <div>
+                        <h2 id="quizTitle" class="text-3xl font-bold text-gray-800 mb-2"></h2>
+                        <div class="flex items-center space-x-4 text-gray-600">
+                            <span id="currentQuestionNumber">Question 1/10</span>
+                            <span>•</span>
+                            <span id="scoreDisplay">Score: 0</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Timer -->
+                    <div class="mt-4 md:mt-0">
+                        <div class="flex items-center space-x-4">
+                            <div class="relative">
+                                <svg width="80" height="80">
+                                    <circle cx="40" cy="40" r="35" stroke="#e5e7eb" stroke-width="8" fill="none"/>
+                                    <circle id="timerCircle" cx="40" cy="40" r="35" stroke="#4ECDC4" stroke-width="8" 
+                                            fill="none" stroke-dasharray="220" stroke-dashoffset="0" class="timer-circle"/>
+                                </svg>
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <span id="timerCount" class="text-2xl font-bold text-gray-800">30</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="text-gray-600">Time Left</div>
+                                <div class="text-sm text-gray-500">seconds</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Progress Bar -->
+                <div class="mt-6">
+                    <div class="flex justify-between text-sm text-gray-600 mb-2">
+                        <span>Progress</span>
+                        <span id="progressText">0%</span>
+                    </div>
+                    <div class="h-3 bg-gray-200 rounded-full overflow-hidden">
+                        <div id="progressBar" class="h-full bg-gradient-to-r from-primary to-pink-400 rounded-full progress-bar" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question Area -->
+            <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+                <h3 id="questionText" class="text-2xl font-bold text-gray-800 mb-8"></h3>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Options will be dynamically added here -->
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex justify-between">
+                <button id="prevBtn" 
+                        class="px-8 py-3 bg-gray-200 text-gray-800 font-bold rounded-xl hover:bg-gray-300 transition-colors hidden">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Previous
+                </button>
+                
+                <button id="nextBtn" 
+                        class="ml-auto px-8 py-3 bg-gradient-to-r from-secondary to-teal-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                    Next Question
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Results Screen (Hidden initially) -->
+        <div id="resultsScreen" class="hidden bg-white rounded-3xl shadow-xl p-8 text-center">
+            <div class="mb-8">
+                <div id="resultIcon" class="text-6xl mb-6"></div>
+                <h2 id="resultTitle" class="text-4xl font-bold text-gray-800 mb-4"></h2>
+                <p id="resultMessage" class="text-gray-600 text-xl mb-8"></p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="bg-gradient-to-br from-primary to-pink-400 rounded-2xl p-6 text-white">
+                    <div class="text-5xl font-bold mb-2" id="finalScore">0</div>
+                    <div class="text-lg">Final Score</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-secondary to-teal-400 rounded-2xl p-6 text-white">
+                    <div class="text-5xl font-bold mb-2" id="correctAnswers">0</div>
+                    <div class="text-lg">Correct Answers</div>
+                </div>
+                
+                <div class="bg-gradient-to-br from-tertiary to-yellow-400 rounded-2xl p-6 text-white">
+                    <div class="text-5xl font-bold mb-2" id="starsEarned">0</div>
+                    <div class="text-lg">Stars Earned</div>
+                </div>
+            </div>
+            
+            <!-- Lanjutan dari parent-children.html -->
+                <div class="space-y-4 mb-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">Your Performance</h3>
+                    <div id="questionReview" class="space-y-4">
+                        <!-- Question reviews will be added here -->
+                    </div>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row justify-center gap-6">
+                    <button onclick="restartQuiz()" 
+                            class="px-8 py-3 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                        <i class="fas fa-redo mr-2"></i>
+                        Play Again
+                    </button>
+                    
+                    <button onclick="goToSelection()" 
+                            class="px-8 py-3 bg-gradient-to-r from-secondary to-teal-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                        <i class="fas fa-list mr-2"></i>
+                        Choose Another Quiz
+                    </button>
+                    
+                    <button onclick="window.location.href='parent.html'" 
+                            class="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                        <i class="fas fa-home mr-2"></i>
+                        Back to Parent Zone
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- No Quiz Available Message -->
+        <div id="noQuizMessage" class="hidden bg-white rounded-3xl shadow-xl p-12 text-center">
+            <div class="mb-8">
+                <div class="w-32 h-32 mx-auto mb-6 rounded-full bg-gradient-to-r from-gray-300 to-gray-400 flex items-center justify-center">
+                    <i class="fas fa-book-open text-white text-5xl"></i>
+                </div>
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">No Quiz Available</h2>
+                <p class="text-gray-600 text-xl mb-6">There are no quizzes created yet.</p>
+                <p class="text-gray-500">Ask your parent to create a quiz first!</p>
+            </div>
+            <button onclick="window.location.href='parent.html'" 
+                    class="px-8 py-3 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Parent Zone
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8 mt-12">
+        <div class="container mx-auto max-w-6xl px-4 text-center">
+            <p class="text-lg">
+                <i class="fas fa-star text-yellow-400 mr-2"></i>
+                Have fun learning and earning stars!
+            </p>
+            <p class="text-gray-400 mt-2">
+                &copy; 2025 Happy Learn - Children's Quiz
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Quiz state
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let score = 0;
+        let timer = 30;
+        let timerInterval = null;
+        let quizCompleted = false;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAvailableQuizzes();
+        });
+
+        // Load available quizzes
+        function loadAvailableQuizzes() {
+            const savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            const quizzesContainer = document.getElementById('availableQuizzes');
+            const noQuizMessage = document.getElementById('noQuizMessage');
+            
+            if (savedQuizzes.length === 0) {
+                document.getElementById('quizSelectionScreen').classList.add('hidden');
+                noQuizMessage.classList.remove('hidden');
+                return;
+            }
+
+            quizzesContainer.innerHTML = savedQuizzes.map(quiz => `
+                <div class="quiz-card bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 hover:shadow-lg transition-all cursor-pointer"
+                     onclick="startQuiz('${quiz.id}')">
+                    <div class="flex justify-between items-center">
+                        <div class="text-left">
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">${quiz.title}</h3>
+                            <div class="flex items-center space-x-4 text-gray-600">
+                                <span><i class="fas fa-question-circle mr-1"></i> ${quiz.questionCount} questions</span>
+                                <span>•</span>
+                                <span><i class="fas fa-clock mr-1"></i> 30s each</span>
+                            </div>
+                        </div>
+                        <div class="text-primary text-3xl">
+                            <i class="fas fa-play-circle"></i>
+                        </div>
+                    </div>
+                    <div class="mt-4 text-left text-gray-500 text-sm">
+                        Created: ${new Date(quiz.createdAt).toLocaleDateString()}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Start quiz
+        function startQuiz(quizId) {
+            const savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            currentQuiz = savedQuizzes.find(q => q.id === quizId);
+            
+            if (!currentQuiz) {
+                alert("Quiz not found!");
+                return;
+            }
+
+            // Initialize quiz state
+            currentQuestionIndex = 0;
+            userAnswers = new Array(currentQuiz.questions.length).fill(null);
+            score = 0;
+            quizCompleted = false;
+
+            // Show quiz screen
+            document.getElementById('quizSelectionScreen').classList.add('hidden');
+            document.getElementById('quizScreen').classList.remove('hidden');
+
+            // Set quiz title
+            document.getElementById('quizTitle').textContent = currentQuiz.title;
+
+            // Load first question
+            loadQuestion();
+        }
+
+        // Load question
+        function loadQuestion() {
+            if (!currentQuiz || currentQuestionIndex >= currentQuiz.questions.length) {
+                showResults();
+                return;
+            }
+
+            const question = currentQuiz.questions[currentQuestionIndex];
+            
+            // Update question text
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('currentQuestionNumber').textContent = 
+                `Question ${currentQuestionIndex + 1}/${currentQuiz.questions.length}`;
+
+            // Clear and add options
+            const optionsContainer = document.querySelector('.grid');
+            optionsContainer.innerHTML = '';
+            
+            ['a', 'b', 'c', 'd'].forEach(optionKey => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = `option-card bg-white border-2 border-gray-200 rounded-xl p-6`;
+                optionDiv.dataset.option = optionKey;
+                optionDiv.onclick = () => selectOption(optionKey);
+                
+                optionDiv.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-primary to-pink-400 flex items-center justify-center text-white font-bold">
+                            ${optionKey.toUpperCase()}
+                        </div>
+                        <div class="text-lg">${question.options[optionKey]}</div>
+                    </div>
+                `;
+                
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Reset timer
+            resetTimer();
+            startTimer();
+
+            // Update progress
+            updateProgress();
+
+            // Update navigation buttons
+            document.getElementById('prevBtn').classList.toggle('hidden', currentQuestionIndex === 0);
+            
+            const nextBtn = document.getElementById('nextBtn');
+            if (currentQuestionIndex === currentQuiz.questions.length - 1) {
+                nextBtn.innerHTML = 'Finish Quiz <i class="fas fa-flag-checkered ml-2"></i>';
+                nextBtn.onclick = showResults;
+            } else {
+                nextBtn.innerHTML = 'Next Question <i class="fas fa-arrow-right ml-2"></i>';
+                nextBtn.onclick = nextQuestion;
+            }
+
+            // If user already answered this question, show selection
+            if (userAnswers[currentQuestionIndex] !== null) {
+                selectOption(userAnswers[currentQuestionIndex], false);
+            }
+        }
+
+        // Select option
+        function selectOption(option, isUserAction = true) {
+            // Remove selection from all options
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+
+            // Add selection to clicked option
+            const selectedCard = document.querySelector(`[data-option="${option}"]`);
+            if (selectedCard) {
+                selectedCard.classList.add('selected');
+            }
+
+            // Store answer
+            userAnswers[currentQuestionIndex] = option;
+            
+            // If user selected an option, check answer immediately
+            if (isUserAction) {
+                checkAnswer(option);
+            }
+        }
+
+        // Check answer
+        function checkAnswer(selectedOption) {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const isCorrect = selectedOption === question.correctAnswer;
+            
+            if (isCorrect) {
+                score++;
+                createConfetti();
+                playSound('correct');
+            } else {
+                playSound('wrong');
+            }
+
+            // Update score display
+            document.getElementById('scoreDisplay').textContent = `Score: ${score}`;
+            
+            // Show correct answer
+            showCorrectAnswer();
+        }
+
+        // Show correct answer
+        function showCorrectAnswer() {
+            const question = currentQuiz.questions[currentQuestionIndex];
+            const correctCard = document.querySelector(`[data-option="${question.correctAnswer}"]`);
+            const selectedCard = document.querySelector('.option-card.selected');
+            
+            if (correctCard) {
+                correctCard.classList.add('correct');
+            }
+            
+            if (selectedCard && selectedCard.dataset.option !== question.correctAnswer) {
+                selectedCard.classList.add('wrong');
+            }
+
+            // Disable further selection
+            document.querySelectorAll('.option-card').forEach(card => {
+                card.style.pointerEvents = 'none';
+            });
+        }
+
+        // Next question
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        // Previous question
+        document.getElementById('prevBtn').addEventListener('click', function() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+            }
+        });
+
+        // Timer functions
+        function startTimer() {
+            clearInterval(timerInterval);
+            timer = 30;
+            updateTimerDisplay();
+            
+            timerInterval = setInterval(() => {
+                timer--;
+                updateTimerDisplay();
+                
+                if (timer <= 0) {
+                    clearInterval(timerInterval);
+                    timeUp();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timerInterval);
+            timer = 30;
+            updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+            document.getElementById('timerCount').textContent = timer;
+            
+            // Update circle progress
+            const circle = document.getElementById('timerCircle');
+            const circumference = 2 * Math.PI * 35;
+            const offset = circumference - (timer / 30) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Change color based on time
+            if (timer <= 10) {
+                circle.style.stroke = '#FF6B8B';
+            } else if (timer <= 20) {
+                circle.style.stroke = '#FFD166';
+            } else {
+                circle.style.stroke = '#4ECDC4';
+            }
+        }
+
+        function timeUp() {
+            if (userAnswers[currentQuestionIndex] === null) {
+                // Auto-select if no answer chosen
+                const options = ['a', 'b', 'c', 'd'];
+                const randomOption = options[Math.floor(Math.random() * options.length)];
+                selectOption(randomOption, false);
+                checkAnswer(randomOption);
+            }
+            
+            // Automatically go to next question after timeout
+            setTimeout(() => {
+                if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                    nextQuestion();
+                } else {
+                    showResults();
+                }
+            }, 2000);
+        }
+
+        // Update progress
+        function updateProgress() {
+            const progress = ((currentQuestionIndex + 1) / currentQuiz.questions.length) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressText').textContent = `${Math.round(progress)}%`;
+        }
+
+        // Show results
+        function showResults() {
+            clearInterval(timerInterval);
+            quizCompleted = true;
+
+            // Calculate final score
+            const totalQuestions = currentQuiz.questions.length;
+            const correctAnswers = score;
+            const percentage = Math.round((correctAnswers / totalQuestions) * 100);
+            const stars = Math.floor(correctAnswers / 2); // 1 star per 2 correct answers
+
+            // Hide quiz screen, show results screen
+            document.getElementById('quizScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+
+            // Set result content based on performance
+            const resultIcon = document.getElementById('resultIcon');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultMessage = document.getElementById('resultMessage');
+            
+            if (percentage >= 80) {
+                resultIcon.innerHTML = '<i class="fas fa-trophy text-yellow-500"></i>';
+                resultTitle.textContent = 'Excellent!';
+                resultMessage.textContent = 'You did an amazing job! Keep up the great work!';
+                createConfetti();
+                playSound('win');
+            } else if (percentage >= 60) {
+                resultIcon.innerHTML = '<i class="fas fa-medal text-gray-500"></i>';
+                resultTitle.textContent = 'Good Job!';
+                resultMessage.textContent = 'You did well! Practice makes perfect!';
+                playSound('good');
+            } else {
+                resultIcon.innerHTML = '<i class="fas fa-heart text-red-500"></i>';
+                resultTitle.textContent = 'Keep Trying!';
+                resultMessage.textContent = 'Nice effort! You\'ll do better next time!';
+                playSound('ok');
+            }
+
+            // Update stats
+            document.getElementById('finalScore').textContent = `${percentage}%`;
+            document.getElementById('correctAnswers').textContent = `${correctAnswers}/${totalQuestions}`;
+            document.getElementById('starsEarned').textContent = stars;
+
+            // Show question review
+            const reviewContainer = document.getElementById('questionReview');
+            reviewContainer.innerHTML = currentQuiz.questions.map((q, index) => {
+                const userAnswer = userAnswers[index];
+                const isCorrect = userAnswer === q.correctAnswer;
+                
+                return `
+                    <div class="text-left p-4 rounded-xl ${isCorrect ? 'bg-green-50 border-2 border-green-100' : 'bg-red-50 border-2 border-red-100'}">
+                        <div class="flex justify-between items-center mb-2">
+                            <h4 class="font-bold">Q${index + 1}: ${q.question}</h4>
+                            <span class="${isCorrect ? 'text-green-600' : 'text-red-600'} font-bold">
+                                ${isCorrect ? '✓ Correct' : '✗ Wrong'}
+                            </span>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            ${['a', 'b', 'c', 'd'].map(opt => `
+                                <div class="p-2 rounded ${q.correctAnswer === opt ? 'bg-green-100' : 
+                                    userAnswer === opt ? 'bg-red-100' : 'bg-gray-100'}">
+                                    <span class="font-bold">${opt.toUpperCase()}:</span> ${q.options[opt]}
+                                    ${q.correctAnswer === opt ? ' <i class="fas fa-check text-green-500"></i>' : ''}
+                                    ${userAnswer === opt && !isCorrect ? ' <i class="fas fa-times text-red-500"></i>' : ''}
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="mt-2 text-sm text-gray-600">
+                            Your answer: <span class="font-bold">${userAnswer ? userAnswer.toUpperCase() : 'None'}</span>
+                            ${!isCorrect ? ` | Correct: <span class="font-bold">${q.correctAnswer.toUpperCase()}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            // Save results to localStorage
+            saveResults(percentage, stars);
+        }
+
+        // Save results
+        function saveResults(score, stars) {
+            const results = {
+                quizId: currentQuiz.id,
+                quizTitle: currentQuiz.title,
+                score: score,
+                stars: stars,
+                date: new Date().toISOString(),
+                answers: userAnswers
+            };
+
+            let allResults = JSON.parse(localStorage.getItem('happyLearnResults') || '[]');
+            allResults.push(results);
+            localStorage.setItem('happyLearnResults', JSON.stringify(allResults));
+        }
+
+        // Restart quiz
+        function restartQuiz() {
+            startQuiz(currentQuiz.id);
+        }
+
+        // Go back to selection
+        function goToSelection() {
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('quizSelectionScreen').classList.remove('hidden');
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#FF6B8B', '#FFD166', '#4ECDC4', '#06D6A0'];
+            
+            for (let i = 0; i < 30; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = '-10px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.width = Math.random() * 10 + 5 + 'px';
+                confetti.style.height = Math.random() * 10 + 5 + 'px';
+                confetti.style.animationDuration = Math.random() * 3 + 2 + 's';
+                confetti.style.animationDelay = Math.random() * 1 + 's';
+                
+                document.body.appendChild(confetti);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    confetti.remove();
+                }, 5000);
+            }
+        }
+
+        // Play sound
+        function playSound(type) {
+            // Create audio context for simple beeps
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            
+            let frequency = 440;
+            let duration = 0.3;
+            
+            switch(type) {
+                case 'correct':
+                    frequency = 523.25; // C5
+                    break;
+                case 'wrong':
+                    frequency = 392.00; // G4
+                    break;
+                case 'win':
+                    frequency = 659.25; // E5
+                    break;
+                case 'good':
+                    frequency = 493.88; // B4
+                    break;
+                case 'ok':
+                    frequency = 440.00; // A4
+                    break;
+            }
+
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = frequency;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + duration);
+        }
+    </script>
+</body>
+</html>

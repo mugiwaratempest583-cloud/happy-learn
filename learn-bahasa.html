@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn Bahasa - Happy Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F0FFF4 0%, #E6FFFA 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #10B981, #059669, #047857, #065F46);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .back-button {
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+        
+        .video-card {
+            transition: all 0.3s ease;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+        }
+        
+        .playlist-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .book-icon {
+            animation: bounce 2s ease-in-out infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-4 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex items-center justify-between">
+                <button onclick="window.location.href='learn.html'" class="back-button flex items-center space-x-2 text-green-600 hover:text-green-800 font-bold text-lg">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Subjects</span>
+                </button>
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center">
+                        <i class="fas fa-language text-white"></i>
+                    </div>
+                    <h1 class="text-3xl font-bold text-gray-800 font-comic">Bahasa <span class="rainbow-text">Playlist</span></h1>
+                </div>
+                <div class="w-24"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-6xl px-4 py-8">
+        <!-- Welcome Section -->
+        <section class="text-center mb-10">
+            <h2 class="text-4xl font-bold text-gray-800 mb-4">
+                Language Learning <span class="rainbow-text">Adventure!</span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-6">
+                Explore letters, words, stories, and language skills through fun animated videos!
+            </p>
+            <div class="bg-gradient-to-r from-green-100 to-emerald-100 rounded-2xl p-6 max-w-3xl mx-auto">
+                <p class="text-lg text-green-800">
+                    <i class="fas fa-book-reader text-green-600 mr-2"></i>
+                    Reading and speaking are superpowers! Start your language journey here!
+                </p>
+            </div>
+        </section>
+
+        <!-- Playlist Section -->
+        <section class="playlist-container mb-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Playlist 1 -->
+                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0">
+                        <iframe 
+                            class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/videoseries?list=PLyb_C2HpOcSBZ8B8A6n9Xg4JqB8I5M8bX"
+                            title="ABC Alphabet"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-font book-icon text-blue-600 mr-3"></i>
+                            ABCs & Alphabet Fun
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Learn all the letters with songs, stories, and animations.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">
+                                26 Videos
+                            </span>
+                            <span class="text-gray-500">
+                                <i class="fas fa-clock mr-1"></i> 2-3 min each
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playlist 2 -->
+                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0">
+                        <iframe 
+                            class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/videoseries?list=PLyb_C2HpOcSD4KZzF3gE9v0_1p5Kp0ZzQ"
+                            title="Vocabulary Building"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-book book-icon text-green-600 mr-3"></i>
+                            Vocabulary Builder
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Learn new words every day with fun themes and categories.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
+                                15 Videos
+                            </span>
+                            <span class="text-gray-500">
+                                <i class="fas fa-clock mr-1"></i> 3-4 min each
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playlist 3 -->
+                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0">
+                        <iframe 
+                            class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/videoseries?list=PL9-tc4FtOsBwnXaae6QH6P9pY9FqDIK8m"
+                            title="Story Time"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-book-open book-icon text-purple-600 mr-3"></i>
+                            Story Time Adventures
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Beautiful animated stories that teach morals and expand vocabulary.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-bold">
+                                10 Videos
+                            </span>
+                            <span class="text-gray-500">
+                                <i class="fas fa-clock mr-1"></i> 5-7 min each
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Playlist 4 - KOLOM YANG DIPERBAIKI -->
+                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0">
+                        <iframe 
+                            class="absolute top-0 left-0 w-full h-full"
+                            src="https://www.youtube.com/embed/videoseries?list=PL5JQsfwp_vD1m4K2Dc8u8PcZqM8LBBJxV"
+                            title="Language Songs"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                    <div class="p-6">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
+                            <i class="fas fa-music book-icon text-red-600 mr-3"></i>
+                            Language Songs & Rhymes
+                        </h3>
+                        <p class="text-gray-600 mb-4">
+                            Catchy songs and rhymes to help you remember words and phrases easily.
+                        </p>
+                        <div class="flex items-center justify-between">
+                            <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
+                                20 Videos
+                            </span>
+                            <span class="text-gray-500">
+                                <i class="fas fa-clock mr-1"></i> 2-4 min each
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Language Tips -->
+        <section class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 mb-12">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-8">
+                <i class="fas fa-star text-yellow-500 mr-3"></i>
+                Language Learning Tips
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-volume-up text-green-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-green-800 mb-3">Listen & Repeat</h4>
+                    <p class="text-gray-700">Listen carefully to how words are pronounced and repeat them out loud.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-book text-blue-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-blue-800 mb-3">Read Every Day</h4>
+                    <p class="text-gray-700">Read simple books or stories for at least 10 minutes daily.</p>
+                </div>
+                <div class="bg-white rounded-2xl p-6 shadow-sm">
+                    <div class="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center mb-4">
+                        <i class="fas fa-comments text-purple-600 text-xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-purple-800 mb-3">Talk & Share</h4>
+                    <p class="text-gray-700">Use new words in conversations with family and friends.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Activity Suggestions -->
+        <section class="bg-white rounded-3xl shadow-xl p-8">
+            <h3 class="text-3xl font-bold text-center text-gray-800 mb-6">
+                <i class="fas fa-pencil-alt text-orange-500 mr-3"></i>
+                Fun Language Activities
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="border-2 border-dashed border-green-300 rounded-2xl p-6">
+                    <h4 class="text-xl font-bold text-green-800 mb-3 flex items-center">
+                        <i class="fas fa-gamepad text-green-600 mr-2"></i>
+                        Word Games
+                    </h4>
+                    <ul class="text-gray-700 space-y-2">
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Play "I Spy" with letters</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Word matching games</li>
+                        <li><i class="fas fa-check-circle text-green-500 mr-2"></i>Rhyme time challenges</li>
+                    </ul>
+                </div>
+                <div class="border-2 border-dashed border-blue-300 rounded-2xl p-6">
+                    <h4 class="text-xl font-bold text-blue-800 mb-3 flex items-center">
+                        <i class="fas fa-palette text-blue-600 mr-2"></i>
+                        Creative Writing
+                    </h4>
+                    <ul class="text-gray-700 space-y-2">
+                        <li><i class="fas fa-check-circle text-blue-500 mr-2"></i>Draw and label pictures</li>
+                        <li><i class="fas fa-check-circle text-blue-500 mr-2"></i>Write short stories</li>
+                        <li><i class="fas fa-check-circle text-blue-500 mr-2"></i>Make your own alphabet book</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8">
+        <div class="container mx-auto max-w-6xl px-4 text-center">
+            <p class="text-lg">
+                <i class="fas fa-heart text-pink-400 mr-2"></i>
+                Keep reading and learning new words every day!
+            </p>
+            <p class="text-gray-400 mt-2">
+                &copy; 2025 Happy Learn - Language Fun
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Add simple hover effect to all video cards
+        document.querySelectorAll('.video-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0)';
+            });
+        });
+    </script>
+</body>
+</html>

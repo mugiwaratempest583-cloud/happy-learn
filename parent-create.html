@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Quiz - Parent Zone</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B8B",
+                        "secondary": "#4ECDC4",
+                        "tertiary": "#FFD166",
+                        "accent": "#06D6A0",
+                        "background": "#F9F7FE"
+                    },
+                    fontFamily: {
+                        "nunito": ["Nunito", "sans-serif"],
+                        "comic": ["Comic Neue", "cursive"]
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #F9F7FE 0%, #E6F7FF 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #FF6B8B, #FFD166, #4ECDC4, #06D6A0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .question-card {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .question-card:hover {
+            transform: translateY(-5px);
+            border-color: #4ECDC4;
+            box-shadow: 0 10px 25px rgba(78, 205, 196, 0.2);
+        }
+        
+        .button-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .button-hover:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-6 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between">
+                <button onclick="window.location.href='parent.html'" class="back-button flex items-center space-x-3 text-primary hover:text-pink-700 font-bold text-lg group mb-4 sm:mb-0">
+                    <i class="fas fa-arrow-left group-hover:transform group-hover:-translate-x-2 transition-transform"></i>
+                    <span>Back to Parent Zone</span>
+                </button>
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-tertiary flex items-center justify-center">
+                        <i class="fas fa-edit text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-4xl font-bold rainbow-text font-comic text-center">
+                        Create Quiz
+                    </h1>
+                </div>
+                <div class="w-24 hidden sm:block"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-6xl px-4 py-8">
+        <!-- Quiz Info -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-3xl font-bold text-gray-800 mb-2">Create Your Quiz</h2>
+                    <p class="text-gray-600">Make 10 custom questions for your child to solve</p>
+                </div>
+                <div class="mt-4 md:mt-0">
+                    <div class="flex items-center space-x-4">
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-primary" id="questionCount">0</div>
+                            <div class="text-gray-600">Questions</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-2xl font-bold text-secondary">10</div>
+                            <div class="text-gray-600">Max</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Quiz Title -->
+            <div class="mb-8">
+                <label class="block text-gray-700 text-lg font-bold mb-3">
+                    <i class="fas fa-heading text-primary mr-2"></i>
+                    Quiz Title
+                </label>
+                <input type="text" id="quizTitle" 
+                       class="w-full p-4 text-lg border-2 border-gray-200 rounded-xl focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20 transition-all"
+                       placeholder="Enter quiz title (e.g., Math Fun, Animal Quiz, etc.)"
+                       maxlength="50">
+                <div class="text-gray-500 text-sm mt-2">
+                    Give your quiz a fun and engaging title!
+                </div>
+            </div>
+        </div>
+
+        <!-- Questions Container -->
+        <div id="questionsContainer" class="space-y-6 mb-8">
+            <!-- Questions will be added here dynamically -->
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap justify-center gap-6 mb-12">
+            <button id="addQuestionBtn" 
+                    class="button-hover px-8 py-4 bg-gradient-to-r from-primary to-pink-500 text-white text-lg font-bold rounded-2xl flex items-center space-x-3">
+                <i class="fas fa-plus-circle"></i>
+                <span>Add Question</span>
+            </button>
+            
+            <button id="saveQuizBtn" 
+                    class="button-hover px-8 py-4 bg-gradient-to-r from-secondary to-teal-500 text-white text-lg font-bold rounded-2xl flex items-center space-x-3">
+                <i class="fas fa-save"></i>
+                <span>Save Quiz</span>
+            </button>
+            
+            <button id="clearQuizBtn" 
+                    class="button-hover px-8 py-4 bg-gradient-to-r from-tertiary to-yellow-500 text-white text-lg font-bold rounded-2xl flex items-center space-x-3">
+                <i class="fas fa-trash-alt"></i>
+                <span>Clear All</span>
+            </button>
+        </div>
+
+        <!-- Preview Section -->
+        <div class="bg-white rounded-3xl shadow-xl p-8 mb-8" id="previewSection" style="display: none;">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-eye text-primary mr-3"></i>
+                Quiz Preview
+            </h3>
+            <div id="quizPreview"></div>
+        </div>
+
+        <!-- Saved Quizzes -->
+        <div class="bg-white rounded-3xl shadow-xl p-8" id="savedQuizzesSection">
+            <h3 class="text-2xl font-bold text-gray-800 mb-6">
+                <i class="fas fa-bookmark text-secondary mr-3"></i>
+                Your Saved Quizzes
+            </h3>
+            <div id="savedQuizzesList" class="space-y-4">
+                <!-- Saved quizzes will appear here -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-8">
+        <div class="container mx-auto max-w-6xl px-4 text-center">
+            <p class="text-lg">
+                <i class="fas fa-heart text-pink-400 mr-2"></i>
+                Create fun learning experiences for your child!
+            </p>
+            <p class="text-gray-400 mt-2">
+                &copy; 2025 Happy Learn - Parent Zone
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modal for Notification -->
+    <div id="notificationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full mx-4 transform transition-all">
+            <div class="text-center mb-6">
+                <div id="modalIcon" class="text-6xl mb-4"></div>
+                <h3 id="modalTitle" class="text-2xl font-bold text-gray-800 mb-2"></h3>
+                <p id="modalMessage" class="text-gray-600"></p>
+            </div>
+            <button id="closeModalBtn" 
+                    class="w-full py-3 bg-gradient-to-r from-primary to-pink-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz data structure
+        let quizData = {
+            title: "",
+            questions: [],
+            createdAt: null,
+            id: null
+        };
+
+        let questionCounter = 0;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            loadSavedQuizzes();
+            createQuestionCard();
+            
+            // Load existing quiz if editing
+            const urlParams = new URLSearchParams(window.location.search);
+            const quizId = urlParams.get('edit');
+            if (quizId) {
+                loadQuizForEditing(quizId);
+            }
+        });
+
+        // Create a new question card
+        function createQuestionCard(questionData = null) {
+            if (questionCounter >= 10) {
+                showNotification("Maximum 10 questions reached!", "error");
+                return;
+            }
+
+            const questionId = questionData ? questionData.id : Date.now() + Math.random();
+            const questionNumber = questionCounter + 1;
+            
+            const questionCard = document.createElement('div');
+            questionCard.className = 'question-card bg-white rounded-2xl shadow-lg p-6';
+            questionCard.id = `question-${questionId}`;
+            
+            questionCard.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-800">
+                        <span class="text-primary">Q${questionNumber}:</span> 
+                        <input type="text" 
+                               class="question-input ml-2 p-2 border-b-2 border-gray-200 focus:border-primary focus:outline-none w-4/5"
+                               placeholder="Enter your question here"
+                               value="${questionData ? questionData.question : ''}"
+                               maxlength="100">
+                    </h3>
+                    <button onclick="removeQuestion('${questionId}')" 
+                            class="text-red-500 hover:text-red-700 text-lg">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    ${['A', 'B', 'C', 'D'].map(option => `
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center font-bold">
+                                ${option}
+                            </div>
+                            <input type="text" 
+                                   class="option-input flex-1 p-3 border-2 border-gray-200 rounded-lg focus:border-primary focus:ring-2 focus:ring-primary focus:ring-opacity-20"
+                                   placeholder="Option ${option}"
+                                   value="${questionData ? questionData.options[option.toLowerCase()] : ''}"
+                                   maxlength="50">
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="mt-6">
+                    <label class="block text-gray-700 font-bold mb-3">
+                        <i class="fas fa-check-circle text-green-500 mr-2"></i>
+                        Correct Answer
+                    </label>
+                    <div class="flex space-x-4">
+                        ${['A', 'B', 'C', 'D'].map(option => `
+                            <label class="flex items-center space-x-2 cursor-pointer">
+                                <input type="radio" 
+                                       name="correct-${questionId}" 
+                                       value="${option}"
+                                       class="hidden"
+                                       ${questionData && questionData.correctAnswer === option ? 'checked' : ''}>
+                                <div class="w-10 h-10 rounded-full border-2 border-gray-300 flex items-center justify-center radio-circle hover:border-primary transition-all">
+                                    <span class="font-bold">${option}</span>
+                                </div>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+                
+                <input type="hidden" class="question-id" value="${questionId}">
+            `;
+            
+            document.getElementById('questionsContainer').appendChild(questionCard);
+            questionCounter++;
+            updateQuestionCount();
+            
+            // Add radio button functionality
+            const radioDivs = questionCard.querySelectorAll('.radio-circle');
+            radioDivs.forEach(div => {
+                const radio = div.parentElement.querySelector('input[type="radio"]');
+                div.addEventListener('click', () => {
+                    radio.checked = true;
+                    updateRadioStyles();
+                });
+            });
+            
+            updateRadioStyles();
+            
+            return questionId;
+        }
+
+        // Update radio button styles
+        function updateRadioStyles() {
+            document.querySelectorAll('.radio-circle').forEach(div => {
+                const radio = div.parentElement.querySelector('input[type="radio"]');
+                if (radio.checked) {
+                    div.classList.add('bg-primary', 'text-white', 'border-primary');
+                    div.classList.remove('border-gray-300');
+                } else {
+                    div.classList.remove('bg-primary', 'text-white', 'border-primary');
+                    div.classList.add('border-gray-300');
+                }
+            });
+        }
+
+        // Remove a question
+        function removeQuestion(questionId) {
+            const questionCard = document.getElementById(`question-${questionId}`);
+            if (questionCard) {
+                questionCard.remove();
+                questionCounter--;
+                updateQuestionCount();
+            }
+        }
+
+        // Update question count display
+        function updateQuestionCount() {
+            document.getElementById('questionCount').textContent = questionCounter;
+        }
+
+        // Add question button
+        document.getElementById('addQuestionBtn').addEventListener('click', function() {
+            createQuestionCard();
+        });
+
+        // Clear all questions
+        document.getElementById('clearQuizBtn').addEventListener('click', function() {
+            if (confirm("Are you sure you want to clear all questions?")) {
+                document.getElementById('questionsContainer').innerHTML = '';
+                document.getElementById('quizTitle').value = '';
+                questionCounter = 0;
+                updateQuestionCount();
+                quizData = { title: "", questions: [], createdAt: null, id: null };
+                hidePreview();
+            }
+        });
+
+        // Save quiz
+        document.getElementById('saveQuizBtn').addEventListener('click', function() {
+            saveQuiz();
+        });
+
+        // Save quiz function
+        function saveQuiz() {
+            // Get quiz title
+            const title = document.getElementById('quizTitle').value.trim();
+            if (!title) {
+                showNotification("Please enter a quiz title!", "warning");
+                return;
+            }
+
+            // Collect questions
+            const questions = [];
+            const questionCards = document.querySelectorAll('.question-card');
+            
+            if (questionCards.length === 0) {
+                showNotification("Please add at least one question!", "warning");
+                return;
+            }
+
+            let isValid = true;
+            
+            questionCards.forEach(card => {
+                const questionInput = card.querySelector('.question-input');
+                const optionInputs = card.querySelectorAll('.option-input');
+                const correctRadio = card.querySelector('input[type="radio"]:checked');
+                const questionId = card.querySelector('.question-id').value;
+
+                const question = questionInput.value.trim();
+                const options = {
+                    a: optionInputs[0].value.trim(),
+                    b: optionInputs[1].value.trim(),
+                    c: optionInputs[2].value.trim(),
+                    d: optionInputs[3].value.trim()
+                };
+                const correctAnswer = correctRadio ? correctRadio.value.toLowerCase() : null;
+
+                // Validate
+                if (!question) {
+                    questionInput.style.borderColor = '#ef4444';
+                    isValid = false;
+                }
+                
+                for (let key in options) {
+                    if (!options[key]) {
+                        card.querySelectorAll('.option-input')[['a','b','c','d'].indexOf(key)].style.borderColor = '#ef4444';
+                        isValid = false;
+                    }
+                }
+                
+                if (!correctAnswer) {
+                    showNotification("Please select correct answer for all questions!", "warning");
+                    isValid = false;
+                }
+
+                questions.push({
+                    id: questionId,
+                    question: question,
+                    options: options,
+                    correctAnswer: correctAnswer
+                });
+            });
+
+            if (!isValid) {
+                showNotification("Please fill all fields and select correct answers!", "error");
+                return;
+            }
+
+            // Create quiz object
+            const quiz = {
+                id: quizData.id || Date.now().toString(),
+                title: title,
+                questions: questions,
+                createdAt: new Date().toISOString(),
+                questionCount: questions.length
+            };
+
+            // Save to localStorage
+            let savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            
+            // Update if exists, else add new
+            const existingIndex = savedQuizzes.findIndex(q => q.id === quiz.id);
+            if (existingIndex >= 0) {
+                savedQuizzes[existingIndex] = quiz;
+            } else {
+                savedQuizzes.push(quiz);
+            }
+            
+            localStorage.setItem('happyLearnQuizzes', JSON.stringify(savedQuizzes));
+
+            // Show success message
+            showNotification(`Quiz "${title}" saved successfully!`, "success");
+            
+            // Update quiz data
+            quizData = quiz;
+            
+            // Show preview
+            showPreview(quiz);
+            
+            // Reload saved quizzes list
+            loadSavedQuizzes();
+        }
+
+        // Load saved quizzes
+        function loadSavedQuizzes() {
+            const savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            const listContainer = document.getElementById('savedQuizzesList');
+            
+            if (savedQuizzes.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-book-open text-4xl mb-4 opacity-50"></i>
+                        <p>No quizzes saved yet. Create your first quiz!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            listContainer.innerHTML = savedQuizzes.map(quiz => `
+                <div class="bg-gray-50 rounded-xl p-4 hover:bg-gray-100 transition-all">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h4 class="font-bold text-gray-800 text-lg">${quiz.title}</h4>
+                            <p class="text-gray-600 text-sm mt-1">
+                                ${quiz.questionCount} questions • 
+                                Created: ${new Date(quiz.createdAt).toLocaleDateString()}
+                            </p>
+                        </div>
+                        <div class="flex space-x-2">
+                            <button onclick="editQuiz('${quiz.id}')" 
+                                    class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button onclick="deleteQuiz('${quiz.id}')" 
+                                    class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                            <button onclick="previewQuiz('${quiz.id}')" 
+                                    class="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Edit quiz
+        function editQuiz(quizId) {
+            window.location.href = `parent-create.html?edit=${quizId}`;
+        }
+
+        // Load quiz for editing
+        function loadQuizForEditing(quizId) {
+            const savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            const quiz = savedQuizzes.find(q => q.id === quizId);
+            
+            if (quiz) {
+                // Clear existing questions
+                document.getElementById('questionsContainer').innerHTML = '';
+                questionCounter = 0;
+                
+                // Set title
+                document.getElementById('quizTitle').value = quiz.title;
+                
+                // Create question cards
+                quiz.questions.forEach(question => {
+                    createQuestionCard(question);
+                });
+                
+                // Set quiz data
+                quizData = quiz;
+                
+                showNotification(`Editing: ${quiz.title}`, "info");
+            }
+        }
+
+        // Preview quiz
+        function previewQuiz(quizId) {
+            const savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+            const quiz = savedQuizzes.find(q => q.id === quizId);
+            
+            if (quiz) {
+                showPreview(quiz);
+            }
+        }
+
+        // Show preview
+        function showPreview(quiz) {
+            const previewSection = document.getElementById('previewSection');
+            const previewContainer = document.getElementById('quizPreview');
+            
+            previewContainer.innerHTML = `
+                <div class="bg-gradient-to-r from-primary to-pink-500 rounded-2xl p-6 text-white mb-6">
+                    <h4 class="text-2xl font-bold mb-2">${quiz.title}</h4>
+                    <p>${quiz.questionCount} questions • Created for your child</p>
+                </div>
+                
+                <div class="space-y-4">
+                    ${quiz.questions.map((q, index) => `
+                        <div class="border-2 border-gray-200 rounded-xl p-4">
+                            <h5 class="font-bold text-gray-800 mb-3">Q${index + 1}: ${q.question}</h5>
+                            <div class="grid grid-cols-2 gap-3">
+                                ${Object.entries(q.options).map(([key, value]) => `
+                                    <div class="p-3 rounded-lg ${q.correctAnswer === key ? 'bg-green-100 border-2 border-green-300' : 'bg-gray-100'}">
+                                        <span class="font-bold">${key.toUpperCase()}:</span> ${value}
+                                        ${q.correctAnswer === key ? ' <i class="fas fa-check text-green-500"></i>' : ''}
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button onclick="shareQuizWithChild('${quiz.id}')" 
+                            class="px-8 py-3 bg-gradient-to-r from-secondary to-teal-500 text-white font-bold rounded-xl hover:opacity-90 transition-opacity">
+                        <i class="fas fa-share-alt mr-2"></i>
+                        Share with Child
+                    </button>
+                </div>
+            `;
+            
+            previewSection.style.display = 'block';
+            previewSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Hide preview
+        function hidePreview() {
+            document.getElementById('previewSection').style.display = 'none';
+        }
+
+        // Share quiz with child
+        function shareQuizWithChild(quizId) {
+            localStorage.setItem('activeChildQuiz', quizId);
+            showNotification("Quiz is now available for your child!", "success");
+        }
+
+        // Delete quiz
+        function deleteQuiz(quizId) {
+            if (confirm("Are you sure you want to delete this quiz?")) {
+                let savedQuizzes = JSON.parse(localStorage.getItem('happyLearnQuizzes') || '[]');
+                savedQuizzes = savedQuizzes.filter(q => q.id !== quizId);
+                localStorage.setItem('happyLearnQuizzes', JSON.stringify(savedQuizzes));
+                loadSavedQuizzes();
+                hidePreview();
+                showNotification("Quiz deleted successfully!", "success");
+            }
+        }
+
+        // Show notification modal
+        function showNotification(message, type = "info") {
+            const modal = document.getElementById('notificationModal');
+            const icon = document.getElementById('modalIcon');
+            const title = document.getElementById('modalTitle');
+            const messageEl = document.getElementById('modalMessage');
+            
+            // Set styles based on type
+            if (type === "success") {
+                icon.innerHTML = '<i class="fas fa-check-circle text-green-500"></i>';
+                title.textContent = "Success!";
+            } else if (type === "error") {
+                icon.innerHTML = '<i class="fas fa-exclamation-circle text-red-500"></i>';
+                title.textContent = "Oops!";
+            } else if (type === "warning") {
+                icon.innerHTML = '<i class="fas fa-exclamation-triangle text-yellow-500"></i>';
+                title.textContent = "Warning!";
+            } else {
+                icon.innerHTML = '<i class="fas fa-info-circle text-blue-500"></i>';
+                title.textContent = "Info";
+            }
+            
+            messageEl.textContent = message;
+            modal.classList.remove('hidden');
+        }
+
+        // Close modal
+        document.getElementById('closeModalBtn').addEventListener('click', function() {
+            document.getElementById('notificationModal').classList.add('hidden');
+        });
+    </script>
+</body>
+</html>

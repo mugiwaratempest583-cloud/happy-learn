@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <base target="_self">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parent Zone - Happy Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Comic+Neue:wght@400;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#FF6B8B",
+                        "secondary": "#4ECDC4",
+                        "tertiary": "#FFD166",
+                        "accent": "#06D6A0",
+                        "background": "#F9F7FE"
+                    },
+                    fontFamily: {
+                        "nunito": ["Nunito", "sans-serif"],
+                        "comic": ["Comic Neue", "cursive"]
+                    },
+                    animation: {
+                        "bounce-slow": "bounce 2s infinite",
+                        "pulse-slow": "pulse 3s infinite",
+                        "float": "float 3s ease-in-out infinite"
+                    },
+                    keyframes: {
+                        float: {
+                            "0%, 100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-10px)" }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #F9F7FE 0%, #E6F7FF 100%);
+            min-height: 100vh;
+        }
+        
+        .rainbow-text {
+            background: linear-gradient(90deg, #FF6B8B, #FFD166, #4ECDC4, #06D6A0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .button-hover {
+            transition: all 0.3s ease;
+            transform: translateY(0);
+        }
+        
+        .button-hover:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .icon-float {
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .back-button {
+            transition: all 0.3s ease;
+        }
+        
+        .back-button:hover {
+            transform: translateX(-5px);
+        }
+        
+        /* Custom scrollbar */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #FF6B8B, #4ECDC4);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="font-nunito min-h-screen">
+    <!-- Header -->
+    <header class="bg-white shadow-lg py-6 px-4">
+        <div class="container mx-auto max-w-6xl">
+            <div class="flex flex-col sm:flex-row items-center justify-between">
+                <button onclick="window.location.href='index.html'" class="back-button flex items-center space-x-3 text-primary hover:text-pink-700 font-bold text-lg group mb-4 sm:mb-0">
+                    <i class="fas fa-arrow-left group-hover:transform group-hover:-translate-x-2 transition-transform"></i>
+                    <span>Back to Home</span>
+                </button>
+                <div class="flex items-center space-x-4">
+                    <div class="w-16 h-16 rounded-full bg-gradient-to-r from-primary to-tertiary flex items-center justify-center animate-pulse-slow">
+                        <i class="fas fa-users text-white text-2xl"></i>
+                    </div>
+                    <h1 class="text-4xl font-bold rainbow-text font-comic text-center">
+                        Parent Zone
+                    </h1>
+                </div>
+                <div class="w-24 hidden sm:block"></div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto max-w-6xl px-4 py-8 md:py-12">
+        <!-- Welcome Section -->
+        <section class="text-center mb-12 md:mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                Welcome to <span class="rainbow-text">Parent Zone!</span>
+            </h2>
+            <p class="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto mb-8">
+                Create custom learning experiences for your child with personalized quizzes!
+            </p>
+            
+            <!-- Stats -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-2xl mx-auto mb-10">
+                <div class="bg-white rounded-2xl p-8 shadow-xl border-2 border-pink-100 hover:border-pink-200 transition-all">
+                    <div class="text-4xl font-bold rainbow-text mb-3">Custom</div>
+                    <div class="text-gray-700">Create Your Own Questions</div>
+                </div>
+                <div class="bg-white rounded-2xl p-8 shadow-xl border-2 border-blue-100 hover:border-blue-200 transition-all">
+                    <div class="text-4xl font-bold rainbow-text mb-3">10</div>
+                    <div class="text-gray-700">Questions per Quiz</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Cards -->
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-12 mb-16">
+            <!-- Parent Feature -->
+            <div class="flex flex-col items-center">
+                <div onclick="window.location.href='parent-create.html'" class="button-hover w-full max-w-lg h-80 rounded-3xl bg-gradient-to-br from-primary to-pink-400 shadow-2xl flex flex-col items-center justify-center p-8 relative overflow-hidden group cursor-pointer">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-white opacity-30"></div>
+                    <div class="icon-float mb-6">
+                        <div class="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
+                            <i class="fas fa-edit text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-4 font-comic">Parent</h3>
+                    <p class="text-white text-lg text-center opacity-90 mb-2">
+                        Create custom quizzes for your child
+                    </p>
+                    <p class="text-white opacity-80 text-center">
+                        Make 10 questions with your own topics
+                    </p>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                </div>
+                <div class="mt-8 text-center space-y-3">
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-check-circle text-primary mr-3"></i>
+                        Create up to 10 questions
+                    </p>
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-check-circle text-primary mr-3"></i>
+                        Set timer: 30 seconds per question
+                    </p>
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-check-circle text-primary mr-3"></i>
+                        Save quizzes for later
+                    </p>
+                </div>
+            </div>
+
+            <!-- Children Feature -->
+            <div class="flex flex-col items-center">
+                <div onclick="window.location.href='parent-children.html'" class="button-hover w-full max-w-lg h-80 rounded-3xl bg-gradient-to-br from-secondary to-teal-400 shadow-2xl flex flex-col items-center justify-center p-8 relative overflow-hidden group cursor-pointer">
+                    <div class="absolute top-0 left-0 w-full h-1 bg-white opacity-30"></div>
+                    <div class="icon-float mb-6">
+                        <div class="w-24 h-24 rounded-full bg-white bg-opacity-30 flex items-center justify-center">
+                            <i class="fas fa-child text-white text-5xl"></i>
+                        </div>
+                    </div>
+                    <h3 class="text-4xl font-bold text-white mb-4 font-comic">Children</h3>
+                    <p class="text-white text-lg text-center opacity-90 mb-2">
+                        Solve quizzes created by parents
+                    </p>
+                    <p class="text-white opacity-80 text-center">
+                        10 questions • 30 seconds per question
+                    </p>
+                    <div class="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-white opacity-10 group-hover:scale-150 transition-transform duration-500"></div>
+                </div>
+                <div class="mt-8 text-center space-y-3">
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-star text-tertiary mr-3"></i>
+                        Earn stars for correct answers
+                    </p>
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-clock text-secondary mr-3"></i>
+                        30 seconds per question
+                    </p>
+                    <p class="text-gray-800 text-lg">
+                        <i class="fas fa-trophy text-accent mr-3"></i>
+                        See results at the end
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it Works -->
+        <section class="bg-white rounded-3xl shadow-xl p-8 md:p-12 mb-12">
+            <h3 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-10">
+                <i class="fas fa-question-circle text-primary mr-3"></i>
+                How It Works
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center p-6 md:p-8 rounded-2xl bg-gradient-to-b from-pink-50 to-white hover:shadow-lg transition-all">
+                    <div class="w-20 h-20 rounded-full bg-primary bg-opacity-20 flex items-center justify-center mx-auto mb-6">
+                        <div class="text-3xl font-bold text-primary">1</div>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Parent Creates Quiz</h4>
+                    <p class="text-gray-700 text-lg">Parent goes to Parent section and creates 10 custom questions with answers.</p>
+                </div>
+                
+                <div class="text-center p-6 md:p-8 rounded-2xl bg-gradient-to-b from-blue-50 to-white hover:shadow-lg transition-all">
+                    <div class="w-20 h-20 rounded-full bg-secondary bg-opacity-20 flex items-center justify-center mx-auto mb-6">
+                        <div class="text-3xl font-bold text-secondary">2</div>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Quiz is Saved</h4>
+                    <p class="text-gray-700 text-lg">The quiz is automatically saved and ready for children to solve.</p>
+                </div>
+                
+                <div class="text-center p-6 md:p-8 rounded-2xl bg-gradient-to-b from-green-50 to-white hover:shadow-lg transition-all">
+                    <div class="w-20 h-20 rounded-full bg-accent bg-opacity-20 flex items-center justify-center mx-auto mb-6">
+                        <div class="text-3xl font-bold text-accent">3</div>
+                    </div>
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Child Solves Quiz</h4>
+                    <p class="text-gray-700 text-lg">Child goes to Children section and solves the quiz with timer and progress bar.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Tips -->
+        <section class="bg-gradient-to-r from-primary to-secondary rounded-3xl shadow-xl p-8 md:p-12 text-white">
+            <h3 class="text-3xl md:text-4xl font-bold text-center mb-10 font-comic">
+                <i class="fas fa-lightbulb mr-3"></i>
+                Quick Tips for Parents
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-brain text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Age-Appropriate Questions</h4>
+                        <p class="opacity-90">Create questions that match your child's learning level for the best experience.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-heart text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Mix Fun with Learning</h4>
+                        <p class="opacity-90">Include topics your child loves to make learning enjoyable.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-trophy text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Encourage Progress</h4>
+                        <p class="opacity-90">Celebrate achievements to boost your child's confidence.</p>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-full bg-white bg-opacity-30 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-clock text-xl"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-bold mb-2">Keep it Short</h4>
+                        <p class="opacity-90">10 questions with 30 seconds each is perfect for young learners.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gradient-to-r from-gray-800 to-gray-900 text-white py-12">
+        <div class="container mx-auto max-w-6xl px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-8 md:mb-0 text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start space-x-3 mb-4">
+                        <div class="w-12 h-12 rounded-full bg-gradient-to-r from-primary to-tertiary flex items-center justify-center">
+                            <i class="fas fa-users text-white"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold font-comic">Parent Zone</h3>
+                    </div>
+                    <p class="text-gray-300 max-w-md">
+                        Empowering parents to create custom learning experiences for their children. 
+                        Together, we make learning fun!
+                    </p>
+                </div>
+                
+                <div class="text-center md:text-right">
+                    <div class="flex justify-center md:justify-end space-x-6 mb-6">
+                        <a href="#" class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="w-12 h-12 rounded-full bg-white bg-opacity-20 flex items-center justify-center hover:bg-opacity-30 transition-all duration-300">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                    <p class="text-gray-400">
+                        &copy; 2025 Happy Learn - Parent Zone
+                    </p>
+                    <p class="text-gray-400 mt-2">
+                        Made with <i class="fas fa-heart text-primary"></i> for parents and kids
+                    </p>
+                </div>
+            </div>
+            
+            <div class="mt-12 pt-8 border-t border-gray-700 text-center">
+                <div class="flex flex-wrap justify-center gap-6 text-gray-300">
+                    <a href="#" class="hover:text-white transition-colors duration-300">Privacy Policy</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300">Parental Controls</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300">Contact Us</a>
+                    <a href="#" class="hover:text-white transition-colors duration-300">Help Center</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Add hover effects
+        const cards = document.querySelectorAll('.button-hover');
+        cards.forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Notification function
+        function showNotification(message, type) {
+            const existingNotification = document.querySelector(".notification");
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+
+            const notification = document.createElement("div");
+            notification.className = `notification fixed top-4 right-4 z-50 px-6 py-4 rounded-2xl shadow-2xl text-white font-bold text-lg transform transition-all duration-500 translate-x-full`;
+            
+            let bgColor = "bg-primary";
+            if (type === "secondary") bgColor = "bg-secondary";
+            if (type === "accent") bgColor = "bg-accent";
+            
+            notification.className += ` ${bgColor}`;
+            notification.innerHTML = `
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-user-circle text-xl"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.remove("translate-x-full");
+                notification.classList.add("translate-x-0");
+            }, 10);
+            
+            setTimeout(() => {
+                notification.classList.remove("translate-x-0");
+                notification.classList.add("translate-x-full");
+                
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        notification.remove();
+                    }
+                }, 500);
+            }, 3000);
+        }
+
+        // Show welcome message
+        window.addEventListener("load", function() {
+            setTimeout(() => {
+                showNotification("Welcome to Parent Zone! Ready to create fun quizzes? 🎯", "accent");
+            }, 1000);
+        });
+
+        // Add click animation to feature cards
+        document.querySelectorAll('.button-hover').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+    </script>
+</body>
+</html>
