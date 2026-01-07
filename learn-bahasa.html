@@ -31,6 +31,7 @@
         
         .video-card {
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .video-card:hover {
@@ -50,6 +51,55 @@
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-5px); }
+        }
+        
+        /* CSS tambahan untuk link playlist */
+        .playlist-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1rem 1rem 0 0;
+        }
+        
+        .video-card:hover .play-button-overlay {
+            opacity: 1;
+        }
+        
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ff0000;
+        }
+        
+        .thumbnail-container {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -94,17 +144,21 @@
         <!-- Playlist Section -->
         <section class="playlist-container mb-12">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Playlist 1 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PLyb_C2HpOcSBZ8B8A6n9Xg4JqB8I5M8bX"
-                            title="ABC Alphabet"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                <!-- Playlist 1 - ABCs & Alphabet Fun -->
+                <a href="https://youtube.com/playlist?list=PLrfg0YIMDNI5JP0iomd92BJMk_jmmpXkS&si=Rk_LgZSt_Np3uKK2" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0 thumbnail-container">
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-100 to-blue-300 flex items-center justify-center">
+                            <i class="fas fa-font text-blue-600 text-6xl book-icon"></i>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -116,26 +170,30 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">
-                                26 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 2-3 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 2 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PLyb_C2HpOcSD4KZzF3gE9v0_1p5Kp0ZzQ"
-                            title="Vocabulary Building"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                <!-- Playlist 2 - Vocabulary Builder -->
+                <a href="https://youtube.com/playlist?list=PLK23LxFSypOSp20_T30uoX48TzLdRc1rb&si=1Igc2O-SGncedVgV" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0 thumbnail-container">
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-100 to-green-300 flex items-center justify-center">
+                            <i class="fas fa-book text-green-600 text-6xl book-icon"></i>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -147,26 +205,30 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
-                                15 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 3-4 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 3 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL9-tc4FtOsBwnXaae6QH6P9pY9FqDIK8m"
-                            title="Story Time"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                <!-- Playlist 3 - Story Time Adventures -->
+                <a href="https://youtube.com/playlist?list=PLrfg0YIMDNI5tPGp2Pf71om96YJf4w5Xb&si=CYkaTngMc9xFa8eA" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0 thumbnail-container">
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-100 to-purple-300 flex items-center justify-center">
+                            <i class="fas fa-book-open text-purple-600 text-6xl book-icon"></i>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -178,26 +240,30 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-bold">
-                                10 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 5-7 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 4 - KOLOM YANG DIPERBAIKI -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
-                    <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL5JQsfwp_vD1m4K2Dc8u8PcZqM8LBBJxV"
-                            title="Language Songs"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                <!-- Playlist 4 - Language Songs & Rhymes -->
+                <a href="https://youtube.com/playlist?list=PLK23LxFSypOTA-DSZv7g0eKB51aOMDqdh&si=IQW1nVmuu8EepO31" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                    <div class="relative pb-[56.25%] h-0 thumbnail-container">
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-red-100 to-red-300 flex items-center justify-center">
+                            <i class="fas fa-music text-red-600 text-6xl book-icon"></i>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -209,14 +275,14 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-bold">
-                                20 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 2-4 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
