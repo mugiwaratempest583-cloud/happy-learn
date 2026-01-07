@@ -31,6 +31,7 @@
         
         .video-card {
             transition: all 0.3s ease;
+            cursor: pointer;
         }
         
         .video-card:hover {
@@ -41,6 +42,43 @@
         .playlist-container {
             max-width: 900px;
             margin: 0 auto;
+        }
+        
+        .playlist-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .play-button-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            border-radius: 1rem 1rem 0 0;
+        }
+        
+        .video-card:hover .play-button-overlay {
+            opacity: 1;
+        }
+        
+        .play-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #ff0000;
         }
     </style>
 </head>
@@ -85,17 +123,23 @@
         <!-- Playlist Section -->
         <section class="playlist-container mb-12">
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Playlist 1 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Playlist 1 - Stories of Prophets -->
+                <a href="https://youtube.com/playlist?list=PLwVWZd1nXYCttI27C2QB4XzNcSawuvtyW&si=30-MsY8kwGguIrIe" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL9-tc4FtOsBwnXaae6QH6P9pY9FqDIK8m"
-                            title="Prophet Stories"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-purple-100 to-purple-300">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-star-and-crescent text-purple-600 text-6xl"></i>
+                            </div>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -107,26 +151,32 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-bold">
-                                10 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 2-5 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 2 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Playlist 2 - Good Manners & Values -->
+                <a href="https://youtube.com/playlist?list=PLwVWZd1nXYCsChQwM6FFv5QssXWlRAor8&si=oLtQPLxVLNmWlFjU" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL5JQsfwp_vD1m4K2Dc8u8PcZqM8LBBJxV"
-                            title="Islamic Manners"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-green-100 to-green-300">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-hands-helping text-green-600 text-6xl"></i>
+                            </div>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -138,26 +188,32 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-bold">
-                                8 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 3-4 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 3 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Playlist 3 - Basics of Islam -->
+                <a href="https://youtube.com/playlist?list=PLwVWZd1nXYCtpMNq40nf0DtLZ-GzjnkVA&si=Q_7M_9dKtkfK-kfZ" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL9-tc4FtOsBzYqTsDGMzCnX7bGzFdW8h2"
-                            title="Five Pillars of Islam"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-100 to-blue-300">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-mosque text-blue-600 text-6xl"></i>
+                            </div>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -169,26 +225,32 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">
-                                6 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 4-6 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
 
-                <!-- Playlist 4 -->
-                <div class="video-card bg-white rounded-2xl shadow-lg overflow-hidden">
+                <!-- Playlist 4 - Quran Stories for Kids -->
+                <a href="https://youtube.com/playlist?list=PLwVWZd1nXYCvKNsKGlZxqf8lkEGen6sXS&si=iSowZC-AR2y9jgGS" 
+                   target="_blank" 
+                   class="playlist-link video-card bg-white rounded-2xl shadow-lg overflow-hidden">
                     <div class="relative pb-[56.25%] h-0">
-                        <iframe 
-                            class="absolute top-0 left-0 w-full h-full"
-                            src="https://www.youtube.com/embed/videoseries?list=PL5JQsfwp_vD1m4K2Dc8u8PcZqM8LBBJxV"
-                            title="Quran Stories"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
-                        </iframe>
+                        <!-- Thumbnail/Preview -->
+                        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-orange-100 to-orange-300">
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <i class="fas fa-book-quran text-orange-600 text-6xl"></i>
+                            </div>
+                            <!-- Play Button Overlay -->
+                            <div class="play-button-overlay">
+                                <div class="play-icon">
+                                    <i class="fab fa-youtube"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-6">
                         <h3 class="text-2xl font-bold text-gray-800 mb-3 flex items-center">
@@ -200,14 +262,14 @@
                         </p>
                         <div class="flex items-center justify-between">
                             <span class="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-bold">
-                                12 Videos
+                                3+ Videos
                             </span>
                             <span class="text-gray-500">
-                                <i class="fas fa-clock mr-1"></i> 5-7 min each
+                                <i class="fas fa-clock mr-1"></i> Varies
                             </span>
                         </div>
                     </div>
-                </div>
+                </a>
             </div>
         </section>
 
